@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checklist</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <h1>Checklist</h1>
+
+  <div id="checklist">
+    <!-- Checklist items will be dynamically added here -->
+  </div>
+
+  <div id="status-bar">
+    <p>Status: <span id="completion">0%</span></p>
+  </div>
+
+  <button onclick="generatePDF()">Generate PDF</button>
+
+  <script>
+    const questions = generateRandomQuestions(12);
+    const checklistDiv = document.getElementById('checklist');
+    const statusBar = document.getElementById('completion');
+
+    let completion = 0;
+
+    questions.forEach((question, index) => {
+      const questionDiv = document.createElement('div');
+      questionDiv.innerHTML = `
+        <p>${question}</p>
+        <input type="radio" name="question${index}" value="yes"> Yes
+        <input type="radio" name="question${index}" value="no"> No
+        <input type="radio" name="question${index}" value="n/a"> N/A
+      `;
+      checklistDiv.appendChild(questionDiv);
+    });
+
+    function updateStatusBar() {
+      const answeredQuestions = document.querySelectorAll('input[type="radio"]:checked').length;
+      completion = (answeredQuestions / questions.length) * 100;
+      statusBar.textContent = `${completion.toFixed(2)}%`;
+    }
+
+    function generatePDF() {
+      const pdf = new jsPDF();
+      pdf.text('Checklist', 20, 10);
+
+      questions.forEach((question, index) => {
+        const answer = document.querySelector(`input[name="question${index}"]:checked`);
+        const answerText = answer ? answer.value : 'Not answered';
+        pdf.text(`${index + 1}. ${question} - ${answerText}`, 20, 20 + index * 10);
+      });
+
+      pdf.save('checklist.pdf');
+    }
+
+    document.addEventListener('change', updateStatusBar);
+  </script>
+</body>
+</html>
