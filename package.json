@@ -1,0 +1,14 @@
+{
+  "name": "checklist",
+  "version": "1.0.0",
+  "description": "a slick checklist providing unprecedenteduser experience",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "kangurzyca",
+  "license": "ISC",
+  "dependencies": {
+    "html2pdf.js": "^0.10.1"
+  }
+}
